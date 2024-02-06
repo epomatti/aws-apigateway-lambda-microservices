@@ -36,6 +36,7 @@ Resources:
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
+      Policies: AmazonSQSFullAccess
       Events:
         HelloWorld:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -56,12 +57,25 @@ Resources:
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           PARAM1: VALUE
+      Policies: AmazonSQSFullAccess
       Events:
         MySQSEvent:
           Type: SQS
           Properties:
             Queue: !GetAtt DocumentsQueue.Arn
             BatchSize: 10
+
+  # LambdaExecutionRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument: Json
+  #     Description: String
+  #     ManagedPolicyArns: 
+  #       - String
+      
+  #     Policies: 
+  #       - Policy
+  #     RoleName: IntegrationLambdaExecutionRole
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
