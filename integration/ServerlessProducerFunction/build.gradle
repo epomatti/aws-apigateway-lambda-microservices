@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
-    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.4'
     testImplementation 'junit:junit:4.13.2'
 }
 

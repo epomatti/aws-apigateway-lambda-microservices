@@ -17,6 +17,12 @@ Resources:
     Properties:
       Name: Basic AWS Api Gateway
       StageName: Staging
+  
+  # https://docs.aws.amazon.com/lambda/latest/dg/with-sqs-example-use-app-spec.html
+  DocumentsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: documents-queue  
 
   ServerlessProducerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -34,6 +40,7 @@ Resources:
         HelloWorld:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
+            # HttpApiId: !Ref ServerlessHttpApi
             Path: /hello
             Method: get
 

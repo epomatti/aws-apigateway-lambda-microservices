@@ -11,5 +11,7 @@ sam sync --stack-name {{stack-name}} --watch
 sam deploy --guided
 ```
 
+Add custom SAM tags to your IDE.
+
 
 https://medium.com/carsales-dev/api-gateway-with-aws-sam-template-c05afdd9cafe
