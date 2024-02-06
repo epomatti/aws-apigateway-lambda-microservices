@@ -19,6 +19,10 @@ sam local generate-event sqs receive-message --body '{"hello": "world"}'
 sam local invoke ServerlessConsumerFunction --event events/sqs.json
 ```
 
+```
+https://<httpapi>.execute-api.us-east-2.amazonaws.com/documents
+```
+
 
 Add custom SAM tags to your IDE.
 
