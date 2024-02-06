@@ -40,15 +40,15 @@ Resources:
         HelloWorld:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            # HttpApiId: !Ref ServerlessHttpApi
-            Path: /hello
-            Method: get
+            ApiId: !Ref ServerlessHttpApi
+            Path: /documents
+            Method: post
   
   ServerlessConsumerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: ServerlessConsumerFunction
-      # Handler: helloworld.App::handleRequest
+      Handler: helloworld.App::handleRequest
       Runtime: java21
       Architectures:
         - arm64
