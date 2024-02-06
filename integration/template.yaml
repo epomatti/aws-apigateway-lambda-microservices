@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   integration
@@ -15,14 +15,25 @@ Resources:
   ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
+      # Auth:
+      #   Authorizers:
+      #     OAuth2Authorizer:
+      #       AuthorizationScopes:
+      #         - scope1
+      #       JwtConfiguration:
+      #         issuer: "https://www.example.com/v1/connect/oauth2"
+      #         audience:
+      #           - MyApi
+      #       IdentitySource: "$request.header.Authorization"
+      #   DefaultAuthorizer: OAuth2Authorizer
       Name: Basic AWS Api Gateway
       StageName: Staging
-  
+
   # https://docs.aws.amazon.com/lambda/latest/dg/with-sqs-example-use-app-spec.html
   DocumentsQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: documents-queue  
+      QueueName: documents-queue
 
   ServerlessProducerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -44,7 +55,7 @@ Resources:
             ApiId: !Ref ServerlessHttpApi
             Path: /documents
             Method: post
-  
+
   ServerlessConsumerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -70,10 +81,10 @@ Resources:
   #   Properties:
   #     AssumeRolePolicyDocument: Json
   #     Description: String
-  #     ManagedPolicyArns: 
+  #     ManagedPolicyArns:
   #       - String
-      
-  #     Policies: 
+
+  #     Policies:
   #       - Policy
   #     RoleName: IntegrationLambdaExecutionRole
 
