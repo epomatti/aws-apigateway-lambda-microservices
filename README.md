@@ -15,3 +15,4 @@ Add custom SAM tags to your IDE.
 
 
 https://medium.com/carsales-dev/api-gateway-with-aws-sam-template-c05afdd9cafe
+https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/javav2/example_code/sqs

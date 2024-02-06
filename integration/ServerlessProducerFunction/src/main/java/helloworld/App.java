@@ -1,18 +1,19 @@
 package helloworld;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SqsException;
 
 /**
  * Handler for requests to Lambda function.
@@ -27,23 +28,47 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
         .withHeaders(headers);
     try {
-      final String pageContents = this.getPageContents("https://checkip.amazonaws.com");
-      String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
+      String queueName = "documents-queue";
+      String message = "Hello";
+      SqsClient sqsClient = SqsClient.builder()
+          .region(Region.US_EAST_2)
+          .build();
+      sendMessage(sqsClient, queueName, message);
+      sqsClient.close();
 
       return response
           .withStatusCode(200)
-          .withBody(output);
-    } catch (IOException e) {
+          .withBody("OK");
+    } catch (Exception e) {
       return response
           .withBody("{}")
           .withStatusCode(500);
     }
   }
 
-  private String getPageContents(String address) throws IOException {
-    URL url = URI.create(address).toURL();
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
-      return br.lines().collect(Collectors.joining(System.lineSeparator()));
+  public static void sendMessage(SqsClient sqsClient, String queueName, String message) {
+    try {
+      CreateQueueRequest request = CreateQueueRequest.builder()
+          .queueName(queueName)
+          .build();
+      sqsClient.createQueue(request);
+
+      GetQueueUrlRequest getQueueRequest = GetQueueUrlRequest.builder()
+          .queueName(queueName)
+          .build();
+
+      String queueUrl = sqsClient.getQueueUrl(getQueueRequest).queueUrl();
+      SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
+          .queueUrl(queueUrl)
+          .messageBody(message)
+          .delaySeconds(5)
+          .build();
+
+      sqsClient.sendMessage(sendMsgRequest);
+
+    } catch (SqsException e) {
+      System.err.println(e.awsErrorDetails().errorMessage());
+      System.exit(1);
     }
   }
 }

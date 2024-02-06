@@ -9,6 +9,8 @@ repositories {
 dependencies {
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.4'
+    implementation(platform('software.amazon.awssdk:bom:2.23.17'))
+    implementation 'software.amazon.awssdk:sqs'
     testImplementation 'junit:junit:4.13.2'
 }
 
